@@ -38,13 +38,13 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-/*        $token = env("TWILIO_AUTH_TOKEN");
+        $token = env("TWILIO_AUTH_TOKEN");
         $twilio_sid = env("TWILIO_SID");
         $twilio_verify_sid = env("TWILIO_VERIFY_SID");
         $twilio = new Client($twilio_sid, $token);
         $twilio->verify->v2->services($twilio_verify_sid)
             ->verifications
-            ->create($request->mobile, "sms");*/
+            ->create($request->mobile, "sms");
 
         $request->validate([
             'email' => 'required',
@@ -70,14 +70,13 @@ class EmployeeController extends Controller
             'verification_code' => ['required', 'numeric'],
             'mobile' => ['required', 'string']
         ]);
-        /* Get credentials from .env */
-/*        $token = env("TWILIO_AUTH_TOKEN");
+        $token = env("TWILIO_AUTH_TOKEN");
         $twilio_sid = env("TWILIO_SID");
         $twilio_verify_sid = env("TWILIO_VERIFY_SID");
         $twilio = new Client($twilio_sid, $token);
         $verification = $twilio->verify->v2->services($twilio_verify_sid)
             ->verificationChecks
-            ->create($data['verification_code'], array('to' => $data['mobile']));*/
+            ->create($data['verification_code'], array('to' => $data['mobile']));
         if (true) {
             Employee::where('mobile', $data['mobile'])->update(['otp_verified' => true]);
             return redirect()->route('employees.index')->with('message', 'Mobile verified');
