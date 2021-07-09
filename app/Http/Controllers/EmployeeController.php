@@ -77,7 +77,7 @@ class EmployeeController extends Controller
         $verification = $twilio->verify->v2->services($twilio_verify_sid)
             ->verificationChecks
             ->create($data['verification_code'], array('to' => $data['mobile']));
-        if (true) {
+        if ($verification->valid) {
             Employee::where('mobile', $data['mobile'])->update(['otp_verified' => true]);
             return redirect()->route('employees.index')->with('message', 'Mobile verified');
         }

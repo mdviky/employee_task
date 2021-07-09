@@ -15,7 +15,7 @@ use App\Http\Controllers\EmployeeController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('employee.index');
 });
 Route::resource('employees', EmployeeController::class);
 Route::get('/enter_otp', [EmployeeController::class,'enter_otp'])->name('enter_otp');
