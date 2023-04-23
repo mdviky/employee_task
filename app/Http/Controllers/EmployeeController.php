@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Employee;
 use Twilio\Rest\Client;
+//use Mckenziearts\Notify
 
 
 class EmployeeController extends Controller
@@ -38,13 +39,13 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        $token = env("TWILIO_AUTH_TOKEN");
+/*         $token = env("TWILIO_AUTH_TOKEN");
         $twilio_sid = env("TWILIO_SID");
         $twilio_verify_sid = env("TWILIO_VERIFY_SID");
         $twilio = new Client($twilio_sid, $token);
         $twilio->verify->v2->services($twilio_verify_sid)
             ->verifications
-            ->create($request->mobile, "sms");
+            ->create($request->mobile, "sms"); */
 
         $request->validate([
             'email' => 'required',
@@ -70,18 +71,22 @@ class EmployeeController extends Controller
             'verification_code' => ['required', 'numeric'],
             'mobile' => ['required', 'string']
         ]);
-        $token = env("TWILIO_AUTH_TOKEN");
+        //echo '<pre>';
+        //print_r($data); exit;
+        /* $token = env("TWILIO_AUTH_TOKEN");
         $twilio_sid = env("TWILIO_SID");
         $twilio_verify_sid = env("TWILIO_VERIFY_SID");
         $twilio = new Client($twilio_sid, $token);
         $verification = $twilio->verify->v2->services($twilio_verify_sid)
             ->verificationChecks
-            ->create($data['verification_code'], array('to' => $data['mobile']));
-        if ($verification->valid) {
+            ->create($data['verification_code'], array('to' => $data['mobile'])); */
+        //if ($verification->valid) {
             Employee::where('mobile', $data['mobile'])->update(['otp_verified' => true]);
+            //notify()->success('Welcome to Laravel Notify ⚡️');
+
             return redirect()->route('employees.index')->with('message', 'Mobile verified');
-        }
-        return back()->with(['mobile' => $data['mobile'], 'message' => 'Invalid verification code entered!']);
+        //}
+        //return back()->with(['mobile' => $data['mobile'], 'message' => 'Invalid verification code entered!']);
     }
 
 

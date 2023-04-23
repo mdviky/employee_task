@@ -54,11 +54,11 @@
                             <div class="card-body">
                                 <form action="{{ route('verify') }}" method="POST" >
                                     @csrf
-                                    @if(Session::has('mob'))
+                                    
                                         {{ __('OTP Sent to Mobile:') }}
                                         <strong> {{ Session::get('mob') }}</strong>
                                         <input type="hidden" name="mobile" value="{{ Session::get('mob') }}">
-                                    @endif
+                                    
 
                                     <div class="row">
                                         <div class="col-md-1">

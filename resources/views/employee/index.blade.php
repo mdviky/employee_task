@@ -22,10 +22,20 @@
     </script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous">
     </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0- 
+     alpha/css/bootstrap.css" rel="stylesheet">
+	
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<link rel="stylesheet" type="text/css" 
+     href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+	
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
 </head>
 
 <body class="">
+
 <div class="wrapper ">
     <div class="sidebar" data-color="purple" data-background-color="white" data-image="../assets/img/sidebar-1.jpg">
         <!--
@@ -48,11 +58,11 @@
                 <div class="row">
                     <div class="col-md-12">
 
-                        @if(Session::has('message'))
-                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        
+<!--                             <div class="alert alert-info alert-dismissible fade show" role="alert">
                                 <strong> {{ Session::get('message') }}</strong>
-                            </div>
-                        @endif
+                            </div> -->
+                        
                         <div class="card">
                             <div class="card-header card-header-primary">
                                 <h4 class="card-title ">Employees</h4>
@@ -164,6 +174,17 @@
     function triggerSub() {
         if(confirm('Delete ?')) document.getElementById("delFrm").submit();
     }
+</script>
+<script>
+  @if(Session::has('message'))
+  toastr.options =
+  {
+  	"closeButton" : true,
+  	"progressBar" : true
+  }
+  		toastr.success("{{ session('message') }}");
+  @endif
+
 </script>
 </body>
 
