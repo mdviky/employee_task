@@ -14,10 +14,11 @@ use App\Http\Controllers\EmployeeController;
 |
 */
 
-Route::get('/', function () {
+/* Route::get('/', function () {
     return view('employee.index');
-});
+}); */
+Route::get('/', [EmployeeController::class,'index']);
+
 Route::resource('employees', EmployeeController::class);
-Route::get('/enter_otp', [EmployeeController::class,'enter_otp'])->name('enter_otp');
-Route::post('/verify', [EmployeeController::class,'verify'])->name('verify');
+Route::get('/email_verify', [EmployeeController::class,'email_verify'])->name('email_verify');
 Route::get('/home', [EmployeeController::class,'home'])->name('home');

@@ -46,58 +46,30 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header card-header-primary">
-                                <h4 class="card-title">Register</h4>
-                                <p class="card-category">Complete your profile</p>
+                                <p class="card-category">Verify Email</p>
                             </div>
+                            @if(Session::has('message'))
+                                <strong> {{ Session::get('message') }}</strong>
+                            @endif
                             <div class="card-body">
-                                <form action="{{ route('employees.store') }}" method="POST" id="empForm">
+                                <form action="{{ route('verify') }}" method="POST" >
                                     @csrf
-                                    <div class="row">
-                                        <!-- {{ $test }} -->
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label class="bmd-label-floating">Email address</label>
-                                                <input type="email" class="form-control" name="email" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label class="bmd-label-floating">Fist Name</label>
-                                                <input type="text" class="form-control" name="fname">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label class="bmd-label-floating">Last Name</label>
-                                                <input type="text" class="form-control" name="lname">
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
+                                        {{ __('OTP Sent to Mobile:') }}
+                                        <strong> {{ Session::get('mob') }}</strong>
+                                        <input type="hidden" name="mobile" value="{{ Session::get('mob') }}">
+                                    
+
                                     <div class="row">
                                         <div class="col-md-1">
                                             <div class="form-group">
-                                                <label class="bmd-label-floating">Age</label>
-                                                <input type="text" class="form-control" name="age">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label class="bmd-label-floating" for="gender"></label>
-                                                <select class="selectpicker" id="gender" name="gender">
-                                                    <option value="MALE">Male</option>
-                                                    <option value="FEMALE">Female</option>
-                                                    <option value="OTHERS">Others</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label class="bmd-label-floating">Mobile</label>
-                                                <input type="text" class="form-control" name="mobile">
+                                                <label class="bmd-label-floating">Otp</label>
+                                                <input type="text" class="form-control" name="verification_code">
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary pull-right">Register</button>
+
+                                    <button type="submit" class="btn btn-primary pull-right">Verify</button>
                                     <div class="clearfix"></div>
                                 </form>
                             </div>
@@ -134,10 +106,7 @@
 <!-- Library for adding dinamically elements -->
 <script src="{{ asset('js/plugins/arrive.min.js') }}"></script>
 <script>
-    $().ready(function() {
-        $("#empForm").validate();
-    });
-
+    //$('#gender').selectpicker();
 
 </script>
 </body>

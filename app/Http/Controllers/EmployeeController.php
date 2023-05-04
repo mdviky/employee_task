@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Employee;
-use Twilio\Rest\Client;
-//use Mckenziearts\Notify
-
+use Illuminate\Support\Facades\Http;
+use App\Mail\HelloEmail;
+use Illuminate\Support\Facades\Mail;
 
 class EmployeeController extends Controller
 {
@@ -19,7 +19,8 @@ class EmployeeController extends Controller
     {
         $employees = Employee::latest()->paginate(5);
         $check_exists = Employee::exists();
-        return view('employee.index', compact(['employees','check_exists']))
+        //dd($employees);
+        return view('employee.index', compact(['employees', 'check_exists']))
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
@@ -28,8 +29,9 @@ class EmployeeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
-        return view('employee.create');
+    public function create()
+    {
+        return view('employee.create',['test'=>'anshuman']);
     }
 
     /**
@@ -39,17 +41,8 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-/*         $token = env("TWILIO_AUTH_TOKEN");
-        $twilio_sid = env("TWILIO_SID");
-        $twilio_verify_sid = env("TWILIO_VERIFY_SID");
-        $twilio = new Client($twilio_sid, $token);
-        $twilio->verify->v2->services($twilio_verify_sid)
-            ->verifications
-            ->create($request->mobile, "sms"); */
-
         $request->validate([
-            'email' => 'required',
-            'mobile' => 'required'
+            'email' => 'required'
         ]);
         Employee::create([
             'fname' => $request->fname,
@@ -59,34 +52,41 @@ class EmployeeController extends Controller
             'age' => $request->age,
             'mobile' => $request->mobile
         ]);
-        return redirect()->route('enter_otp')->with('mob',$request->mobile);
+        //$new_email_key = md5(rand().microtime());
+
+        $reveiverEmailAddress = $request->email;
+        /**
+         * Import the Mail class at the top of this page,
+         * and call the to() method for passing the 
+         * receiver email address.
+         * 
+         * Also, call the send() method to incloude the
+         * HelloEmail class that contains the email template.
+         */
+        Mail::to($reveiverEmailAddress)->send(new HelloEmail);
+
+        /**
+         * Check if the email has been sent successfully, or not.
+         * Return the appropriate message.
+         */
+        if (Mail::failures() != 0) {
+            //return "Email has been sent successfully.";
+            //return back()->with(['email' => $reveiverEmailAddress, 'message' => 'Email has been sent successfully.']);
+            return redirect()->route('employees.index')->with('message','Email has been sent successfully.');
+        }
+        return "Oops! There was some error sending the email.";
     }
 
-    public function enter_otp() {
-        return view('employee.enter_otp');
-    }
+    public function email_verify(Request $request)
+    {
+        if($request->has('m')) {
+            //echo $request->input('m');
+            echo $request->input('key');
+        }
+        //dd($request);
+        Employee::where('email', $request->input('m'))->update(['verify_email' => 1]);
+        return redirect()->route('employees.index')->with('message', 'Mobile verified');
 
-    public function verify(Request $request) {
-        $data = $request->validate([
-            'verification_code' => ['required', 'numeric'],
-            'mobile' => ['required', 'string']
-        ]);
-        //echo '<pre>';
-        //print_r($data); exit;
-        /* $token = env("TWILIO_AUTH_TOKEN");
-        $twilio_sid = env("TWILIO_SID");
-        $twilio_verify_sid = env("TWILIO_VERIFY_SID");
-        $twilio = new Client($twilio_sid, $token);
-        $verification = $twilio->verify->v2->services($twilio_verify_sid)
-            ->verificationChecks
-            ->create($data['verification_code'], array('to' => $data['mobile'])); */
-        //if ($verification->valid) {
-            Employee::where('mobile', $data['mobile'])->update(['otp_verified' => true]);
-            //notify()->success('Welcome to Laravel Notify ⚡️');
-
-            return redirect()->route('employees.index')->with('message', 'Mobile verified');
-        //}
-        //return back()->with(['mobile' => $data['mobile'], 'message' => 'Invalid verification code entered!']);
     }
 
 
@@ -96,9 +96,9 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Employee $employee) {
+    public function show(Employee $employee)
+    {
         return view('employee.show', compact('employee'));
-
     }
 
     /**
@@ -107,7 +107,8 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Employee $employee) {
+    public function edit(Employee $employee)
+    {
         return view('employee.edit', compact('employee'));
     }
 
@@ -118,12 +119,16 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Employee $employee) {
+    public function update(Request $request, Employee $employee)
+    {
+        //dd($request);
         $request->validate([
             'fname' => 'required',
             'lname' => 'required',
             'email' => 'required'
         ]);
+        //dd($request->all());
+        //exit;
         $employee->update($request->all());
 
         return redirect()->route('employees.index')

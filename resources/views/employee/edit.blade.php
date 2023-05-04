@@ -87,6 +87,12 @@
                                                 <input type="text" class="form-control" name="age" value="{{ $employee->age }}">
                                             </div>
                                         </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="bmd-label-floating">Mobile</label>
+                                                <input type="text" class="form-control" name="mobile" value="{{ $employee->mobile }}">
+                                            </div>
+                                        </div>
                                     </div>
                                     <button type="submit" class="btn btn-primary pull-right">Save Changes</button>
                                     <div class="clearfix"></div>

@@ -73,6 +73,7 @@
                             @if(empty($check_exists))
                                 {{__('No records')}}
                             @else
+                            
 
                                     <div class="table-responsive">
                                         <table class="table">
@@ -95,7 +96,7 @@
                                             <th>
                                                 Mobile
                                             </th>
-                                            <th>Date Created</th>
+                                            <th>Date Updated</th>
 
                                             <th>
                                                 Edit
@@ -103,6 +104,7 @@
                                             <th>Delete</th>
                                             </thead>
                                             <tbody>
+                                 {{ $i }}
                                             @foreach ($employees as $employee)
                                                 <tr>
                                                     <td>{{ ++$i }}</td>
@@ -111,7 +113,7 @@
                                                     <td>{{ $employee->email }}</td>
                                                     <td>{{ $employee->gender }}</td>
                                                     <td>{{ $employee->mobile }}</td>
-                                                    <td>{{ date_format($employee->created_at, 'jS M Y') }}</td>
+                                                    <td>{{ date_format($employee->updated_at, 'jS M Y') }}</td>
                                                     <td>
                                                         <a href="{{ route('employees.edit', $employee->id) }}">
                                                             <i class="fas fa-edit  fa-lg"></i>
@@ -131,6 +133,7 @@
                                             @endforeach
                                             </tbody>
                                         </table>
+                                        {{ $employees->links() }}
                                     </div>
 
                             @endif
